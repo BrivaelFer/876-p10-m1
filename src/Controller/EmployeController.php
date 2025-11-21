@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\EmployeInscriptionType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -78,6 +79,16 @@ class EmployeController extends AbstractController
 
         return $this->render('employe/employe.html.twig', [
             'employe' => $employe,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/incription', name: 'app_employe_incription')]
+    public function incription(Request $request): Response
+    {
+        $form = $form = $this->createForm(EmployeInscriptionType::class);
+
+        return $this->render('employe/inscription.html.twig', [
             'form' => $form->createView(),
         ]);
     }

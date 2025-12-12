@@ -2,14 +2,18 @@
 
 namespace App\Controller;
 
-use App\Form\EmployeInscriptionType;
+use App\Entity\Employe;
+use App\Form\RegisterType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\EmployeRepository;
 use App\Form\EmployeType;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class EmployeController extends AbstractController
 {
@@ -22,6 +26,7 @@ class EmployeController extends AbstractController
     }
 
     #[Route('/employes', name: 'app_employes')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function employes(): Response
     {
         $employes = $this->employeRepository->findAll();
@@ -32,6 +37,7 @@ class EmployeController extends AbstractController
     }
 
     #[Route('/employes/{id}', name: 'app_employe')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function employe($id): Response
     {
         $employe = $this->employeRepository->find($id);
@@ -46,6 +52,7 @@ class EmployeController extends AbstractController
     }
 
     #[Route('/employes/{id}/supprimer', name: 'app_employe_delete')]
+    #[IsGranted('ROLE_ADMIN')]
     public function supprimerEmploye($id): Response
     {
         $employe = $this->employeRepository->find($id);
@@ -61,6 +68,7 @@ class EmployeController extends AbstractController
     }
 
     #[Route('/employes/{id}/editer', name: 'app_employe_edit')]
+    #[IsGranted('ROLE_ADMIN')]
     public function editerEmploye($id, Request $request): Response
     {
         $employe = $this->employeRepository->find($id);
@@ -83,10 +91,23 @@ class EmployeController extends AbstractController
         ]);
     }
 
-    #[Route('/incription', name: 'app_employe_incription')]
-    public function incription(Request $request): Response
+    #[Route('/connexion/incription', name: 'app_employe_incription')]
+    public function register(Request $request, UserPasswordHasherInterface $hasher): Response
     {
-        $form = $form = $this->createForm(EmployeInscriptionType::class);
+        $form = $form = $this->createForm(RegisterType::class, new Employe());
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Employe $emp */
+            $emp = $form->getData();
+            $emp->setPassword($hasher->hashPassword($emp, $emp->getPassword()));
+            $emp->setDateArrivee(new DateTime());
+            $emp->setStatut('N/A');
+
+            $this->entityManager->persist($emp);
+            $this->entityManager->flush();
+            return $this->redirectToRoute('app_projets');
+        }
 
         return $this->render('employe/inscription.html.twig', [
             'form' => $form->createView(),

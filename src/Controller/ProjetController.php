@@ -11,7 +11,9 @@ use App\Repository\StatutRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Projet;
 use App\Form\ProjetType;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class ProjetController extends AbstractController
 {
     public function __construct(
@@ -36,6 +38,7 @@ class ProjetController extends AbstractController
     }
 
     #[Route('/projets/ajouter', name: 'app_projet_add')]
+    #[IsGranted('ROLE_ADMIN')]
     public function ajouterProjet(Request $request): Response
     {  
         $projet = new Projet();

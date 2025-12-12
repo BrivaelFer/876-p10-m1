@@ -7,8 +7,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
-class EmployeInscriptionType extends AbstractType
+class RegisterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -16,9 +18,12 @@ class EmployeInscriptionType extends AbstractType
             ->add('nom')
             ->add('prenom')
             ->add('email', EmailType::class)
-            ->add('password')
-            ->add('passwordConfirm')
-        ;
+            ->add('password', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'required' => true,
+                'first_options'  => ['label' => 'Password'],
+                'second_options' => ['label' => 'Repeat Password']
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

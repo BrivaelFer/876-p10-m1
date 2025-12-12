@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue sur TaskLinker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            background-color: #3a5a52;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            width: 320px;
+        }
+
+        .title {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            margin-bottom: 32px;
+            opacity: 0.9;
+        }
+
+        .question {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 16px;
+            padding: 12px 24px;
+            margin: 8px 0;
+            text-decoration: none;
+            width: 100%;
+        }
+
+        .btn--login {
+            background-color: #2d4a43;
+            color: white;
+        }
+
+        .btn--login:hover {
+            background-color: #3a5a52;
+        }
+
+        .divider {
+            margin: 16px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: "ou";
+            background-color: #3a5a52;
+            color: white;
+            padding: 0 16px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .divider hr {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 8px;
+        }
+
+        .btn--signup {
+            background-color: #a8d5a8;
+            color: #2d4a43;
+        }
+
+        .btn--signup:hover {
+            background-color: #b8e0b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="modal">
+        <h1 class="modal__title">Bienvenue sur TaskLinker</h1>
+        <p class="modal__subtitle">Commencez dès maintenant - gratuitement</p>
+        <p class="modal__question">Vous avez déjà un compte ?</p>
+        <a href="#" class="btn btn--login">Se connecter</a>
+        <div class="divider">
+            <hr>
+        </div>
+        <a href="#" class="btn btn--signup">S'inscrire</a>
+    </div>
+</body>
+</html>

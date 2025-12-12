@@ -12,10 +12,16 @@
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script src="{{ asset('js/select.js') }}"></script>
+        <link rel="stylesheet" href="{{ asset('css/connect.css') }}"/>
     </head>
     <body>
-        <h1>TaskLinker</h1>
-        <div class=''>
+        <a href="{{ path('app_projets') }}" id="logo">
+            <img src="{{ asset('img/logo.png') }}" alt="Logo TaskLinker" />
+        </a>
+        <div class={% block cardClass %}'connection-card'{% endblock %}>
+            <div>
+                {% block header %}{% endblock %}
+            </div>
             {% block body %}{% endblock %}
         </div>
     </body>

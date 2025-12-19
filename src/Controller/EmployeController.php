@@ -33,21 +33,7 @@ class EmployeController extends AbstractController
         
         return $this->render('employe/liste.html.twig', [
             'employes' => $employes,
-        ]);
-    }
-
-    #[Route('/employes/{id}', name: 'app_employe')]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function employe($id): Response
-    {
-        $employe = $this->employeRepository->find($id);
-
-        if(!$employe) {
-            return $this->redirectToRoute('app_employes');
-        }
-        
-        return $this->render('employe/employe.html.twig', [
-            'employe' => $employe,
+            'admin' => $this->isGranted('ROLE_ADMIN')
         ]);
     }
 
@@ -94,15 +80,16 @@ class EmployeController extends AbstractController
     #[Route('/connexion/incription', name: 'app_employe_incription')]
     public function register(Request $request, UserPasswordHasherInterface $hasher): Response
     {
-        $form = $form = $this->createForm(RegisterType::class, new Employe());
-
+        $emp = new Employe();
+        $form = $this->createForm(RegisterType::class, $emp);
+        $emp->setDateArrivee(new DateTime());
+        $emp->setStatut('N/A');
+        
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Employe $emp */
             $emp = $form->getData();
             $emp->setPassword($hasher->hashPassword($emp, $emp->getPassword()));
-            $emp->setDateArrivee(new DateTime());
-            $emp->setStatut('N/A');
 
             $this->entityManager->persist($emp);
             $this->entityManager->flush();

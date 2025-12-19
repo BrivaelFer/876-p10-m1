@@ -28,12 +28,24 @@ class ProjetController extends AbstractController
     #[Route('/', name: 'app_projets')]
     public function projets(): Response
     {
+        $user = $this->getUser();
+
         $projets = $this->projetRepository->findBy([
             'archive' => false,
         ]);
 
+        
+        if(!$this->isGranted('ROLE_ADMIN')) {
+            $keep = [];
+            foreach($projets as $projet) {
+                if($projet->isInProject($user->getUserIdentifier())) $keep[] = $projet;     
+            }
+            $projets = $keep;
+        } 
+
         return $this->render('projet/liste.html.twig', [
             'projets' => $projets,
+            'admin' => $this->isGranted('ROLE_ADMIN')
         ]);
     }
 
@@ -64,18 +76,23 @@ class ProjetController extends AbstractController
     {  
         $statuts = $this->statutRepository->findAll();
         $projet = $this->projetRepository->find($id);
-
-        if(!$projet || $projet->isArchive()) {
+        $user = $this->getUser();
+        
+        $redirect = !$this->isGranted('ROLE_ADMIN') && $projet ? !$projet->isInProject($user->getUserIdentifier()) : false;
+        
+        if(!$projet || $projet->isArchive() || $redirect) {
             return $this->redirectToRoute('app_projets');
         }
 
         return $this->render('projet/projet.html.twig', [
             'projet' => $projet,
             'statuts' => $statuts,
+            'admin' => $this->isGranted('ROLE_ADMIN')
         ]);
     }
 
     #[Route('/projets/{id}/archiver', name: 'app_projet_archive')]
+    #[IsGranted('ROLE_ADMIN')]
     public function archiverProjet(int $id): Response
     {  
         $projet = $this->projetRepository->find($id);
@@ -92,6 +109,7 @@ class ProjetController extends AbstractController
 
 
     #[Route('/projets/{id}/editer', name: 'app_projet_edit')]
+    #[IsGranted('ROLE_ADMIN')]
     public function editerProjet(int $id, Request $request): Response
     {  
         $projet = $this->projetRepository->find($id);

@@ -1,0 +1,22 @@
+{% extends 'unconnectedBase.html.twig' %}
+
+{% block title %}Inscription - {{ parent() }}{% endblock %}
+
+{% block header %}
+    <h1>S'inscrire</h1>
+{% endblock %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+
+    {{ form_row(form.nom) }}
+    {{ form_row(form.prenom) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.password.first) }}
+    {{ form_row(form.password.second) }}
+    <button class="button button-submit">Enregistrer</button>
+    {{ form_end(form) }}
+    <a class='cc-link' href="{{ path('app_login') }}">Vous avez déjà un compte ?</a>
+
+{% endblock %}

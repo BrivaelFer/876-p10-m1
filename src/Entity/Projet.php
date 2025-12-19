@@ -117,4 +117,13 @@ class Projet
 
         return $this;
     }
+
+    
+    public function isInProject(string $email): bool
+    {
+        foreach($this->employes as $employe){
+            if($employe->getEmail() === $email) return true;
+        }
+        return false;
+    }
 }

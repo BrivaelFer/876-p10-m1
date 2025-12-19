@@ -12,7 +12,9 @@ use App\Repository\TacheRepository;
 use App\Form\TacheType;
 use App\Entity\Tache;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class TacheController extends AbstractController
 {
 
@@ -30,7 +32,10 @@ class TacheController extends AbstractController
     {  
         $projet = $this->projetRepository->find($id);
 
-        if(!$projet || $projet->isArchive()) {
+        $user = $this->getUser();
+        $redirect = !$this->isGranted('ROLE_ADMIN') && $projet ? !$projet->isInProject($user->getUserIdentifier()) : false;
+
+        if(!$projet || $projet->isArchive() || $redirect) {
             return $this->redirectToRoute('app_projets');
         }
 
@@ -55,8 +60,12 @@ class TacheController extends AbstractController
     public function supprimerTache(int $id): Response
     {  
         $tache = $this->tacheRepository->find($id);
+        $projet = $tache?->getProjet();
 
-        if(!$tache || $tache->getProjet()->isArchive()) {
+        $user = $this->getUser();
+        $redirect = !$this->isGranted('ROLE_ADMIN') && $projet ? !$projet->isInProject($user->getUserIdentifier()) : false;
+
+        if(!$tache || $tache->getProjet()->isArchive() || $redirect) {
             return $this->redirectToRoute('app_projets');
         }
 
@@ -72,7 +81,13 @@ class TacheController extends AbstractController
     {  
         $tache = $this->tacheRepository->find($id);
 
-        if(!$tache || $tache->getProjet()->isArchive()) {
+        $projet = $tache?->getProjet();
+
+        $user = $this->getUser();
+        $redirect = !$this->isGranted('ROLE_ADMIN') && $projet ? !$projet->isInProject($user->getUserIdentifier()) : false;
+
+
+        if(!$tache || $tache->getProjet()->isArchive() || $redirect) {
             return $this->redirectToRoute('app_projets');
         }
 

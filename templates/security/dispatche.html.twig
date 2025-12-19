@@ -1,0 +1,19 @@
+{% extends 'unconnectedBase.html.twig' %}
+
+{% block title %}Connexion - {{ parent() }}{% endblock %}
+
+{% block header %}
+    <h1 class="title">Bienvenue sur TaskLinker</h1>
+    <p class="subtitle">Commencez dès maintenant - gratuitement </p>
+{% endblock %}
+
+{% block body %}
+    <div id='cc-content'>
+        <p class="question">Vous avez déjà un compte ?</p>
+        <a class="btn btn--login" href="{{ path('app_login') }}">Se connecter</a>
+        <div class="divider">
+           <hr> <p>ou</p>  <hr>
+        </div>
+        <a class="btn btn--signup" href="{{ path('app_employe_incription') }}">S'identifier</a>
+    </div>
+{% endblock %}

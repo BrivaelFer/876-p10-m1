@@ -13,7 +13,7 @@
         <tr>
             <th>Prénom, Nom</th>
             <th>Statut</th>
-            <th>Actions</th>
+            <th {% if not admin %}style='display: none'{% endif %}>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -31,14 +31,15 @@
                     </div>
                 </td>
                 <td>{{ employe.statut }}</td>
-                <td>
+                
+                <td {% if not admin %}style='display: none'{% endif %}>
                     <a class="button button-edit-team" href="{{ path('app_employe_edit', {id: employe.id}) }}">
                         Éditer
                     </a>
                     <a class="delete-team" href="{{ path('app_employe_delete', {id: employe.id}) }}">
                         Supprimer
                     </a>
-                </td>
+                </td> 
             </tr>
         {% endfor %}
     </tbody>
